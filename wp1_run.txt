@@ -1,0 +1,349 @@
+Tuned XGBoost params: {'max_depth': 4, 'learning_rate': 0.02, 'n_estimators': 100, 'subsample': 0.8, 'colsample_bytree': 0.6, 'min_child_weight': 7, 'reg_alpha': 5.0, 'reg_lambda': 2.0}
+
+train: rows=49800 span_days=626 hours_present=24 dows_present=[2, 3, 4, 5, 6, 0, 1] day0..6 counts={0: 7466, 1: 6769, 2: 7210, 3: 7305, 4: 7387, 5: 7269, 6: 6394}
+
+test: rows=12450 span_days=343 hours_present=24 dows_present=[5, 6, 0, 1, 2, 3, 4] day0..6 counts={0: 1866, 1: 1885, 2: 1830, 3: 1821, 4: 2003, 5: 1617, 6: 1428}
+
+######################################################################
+VARIANT V0
+######################################################################
+Features: 27 columns
+
+============================================================
+V0 LogReg - TEST  (threshold=0.57)
+============================================================
+[[1497 2614]
+ [2200 6139]]
+              precision    recall  f1-score   support
+
+           0      0.405     0.364     0.383      4111
+           1      0.701     0.736     0.718      8339
+
+    accuracy                          0.613     12450
+   macro avg      0.553     0.550     0.551     12450
+weighted avg      0.603     0.613     0.608     12450
+
+ROC-AUC: 0.5795  PR-AUC: 0.7248  KS: 11.8  Gini: 0.1590  Brier: 0.2213
+
+Decile/Lift table:
+           n  positive  positive_rate   lift  cum_positive_pct
+decile                                                        
+1       1245       959          0.770  1.150            11.500
+2       1245       906          0.728  1.086            22.365
+3       1245       895          0.719  1.073            33.097
+4       1245       876          0.704  1.050            43.602
+5       1245       858          0.689  1.029            53.891
+6       1245       832          0.668  0.998            63.869
+7       1245       792          0.636  0.950            73.366
+8       1245       765          0.614  0.917            82.540
+9       1245       762          0.612  0.914            91.678
+10      1245       694          0.557  0.832           100.000
+[V0 LogReg] train_cv_auc=0.5627 (std 0.0225) test_auc=0.5795 train_auc=0.6118 gap=0.0323 threshold=0.57
+
+============================================================
+V0 XGBtuned - TEST  (threshold=0.56)
+============================================================
+[[ 981 3130]
+ [1333 7006]]
+              precision    recall  f1-score   support
+
+           0      0.424     0.239     0.305      4111
+           1      0.691     0.840     0.758      8339
+
+    accuracy                          0.642     12450
+   macro avg      0.558     0.539     0.532     12450
+weighted avg      0.603     0.642     0.609     12450
+
+ROC-AUC: 0.5955  PR-AUC: 0.7513  KS: 14.9  Gini: 0.1909  Brier: 0.2175
+
+Decile/Lift table:
+           n  positive  positive_rate   lift  cum_positive_pct
+decile                                                        
+1       1245      1014          0.814  1.216            12.160
+2       1245       940          0.755  1.127            23.432
+3       1245       904          0.726  1.084            34.273
+4       1245       870          0.699  1.043            44.706
+5       1245       853          0.685  1.023            54.935
+6       1245       762          0.612  0.914            64.072
+7       1245       762          0.612  0.914            73.210
+8       1245       790          0.635  0.947            82.684
+9       1245       750          0.602  0.899            91.678
+10      1245       694          0.557  0.832           100.000
+[V0 XGBtuned] train_cv_auc=0.5936 (std 0.0120) test_auc=0.5955 train_auc=0.6687 gap=0.0733 threshold=0.56
+Loaded 62250 rows, 35 columns
+open_time dtype: datetime64[ns, UTC]  (tz: UTC)
+Date range: 2021-05-05 02:10:21+00:00 -> 2023-12-31 05:49:35+00:00
+Class balance: {1: 0.6000803212851405, 0: 0.39991967871485945}
+Added cyclical time features: ['open_hour_sin', 'open_hour_cos', 'open_dow_sin', 'open_dow_cos']
+
+Split at 2023-01-21 15:41:35+00:00
+Train: 49800 rows (2021-05-05 02:10:21+00:00 -> 2023-01-21 15:39:23+00:00)
+Test:  12450 rows (2023-01-21 15:41:35+00:00 -> 2023-12-31 05:49:35+00:00)
+Train class balance: 0.583 profitable
+Test class balance:  0.670 profitable
+
+Excluded as leakage: ['close_time', 'token0_price_close', 'token1_price_close', 'held_value_usd', 'returned_value_usd', 'true_fees_value_usd', 'impermanent_loss_usd', 'position_duration_hours', 'decrease_event_count']
+Excluded as ID/redundant: ['tokenId', 'open_time', 'token0_address', 'token1_address']
+Remaining feature columns (25): ['range_width_normalized', 'pool_address', 'fee_tier_pct', 'mint_amount0_adj', 'mint_amount1_adj', 'log_deposit_value_usd', 'token0_price_open', 'token1_price_open', 'deposit_value_usd', 'token0_is_stablecoin', 'token1_is_stablecoin', 'token0_price_std_24h', 'token0_price_pct_change_24h', 'token0_price_range_pct_24h', 'token1_price_std_24h', 'token1_price_pct_change_24h', 'token1_price_range_pct_24h', 'pre_open_avg_daily_swap_count_3d', 'pre_open_avg_daily_token0_volume_3d', 'range_overlaps_recent_trading', 'lp_prior_position_count', 'open_hour_sin', 'open_hour_cos', 'open_dow_sin', 'open_dow_cos']
+
+X_train shape: (49800, 32), X_test shape: (12450, 32)
+Scaled 21 continuous columns; left 3 binary/dummy columns unscaled
+
+Done. Review the correlation flags and Lasso/RF agreement before finalizing the feature list you report in Chapter 6 of the write-up.
+
+######################################################################
+VARIANT V1
+######################################################################
+Features: 31 columns
+
+============================================================
+V1 LogReg - TEST  (threshold=0.57)
+============================================================
+[[1505 2606]
+ [2189 6150]]
+              precision    recall  f1-score   support
+
+           0      0.407     0.366     0.386      4111
+           1      0.702     0.737     0.720      8339
+
+    accuracy                          0.615     12450
+   macro avg      0.555     0.552     0.553     12450
+weighted avg      0.605     0.615     0.609     12450
+
+ROC-AUC: 0.5788  PR-AUC: 0.7245  KS: 11.6  Gini: 0.1577  Brier: 0.2214
+
+Decile/Lift table:
+           n  positive  positive_rate   lift  cum_positive_pct
+decile                                                        
+1       1245       959          0.770  1.150            11.500
+2       1245       894          0.718  1.072            22.221
+3       1245       907          0.729  1.088            33.097
+4       1245       895          0.719  1.073            43.830
+5       1245       827          0.664  0.992            53.747
+6       1245       821          0.659  0.985            63.593
+7       1245       818          0.657  0.981            73.402
+8       1245       761          0.611  0.913            82.528
+9       1245       753          0.605  0.903            91.558
+10      1245       704          0.565  0.844           100.000
+[V1 LogReg] train_cv_auc=0.5617 (std 0.0242) test_auc=0.5788 train_auc=0.6123 gap=0.0335 threshold=0.57
+
+============================================================
+V1 XGBtuned - TEST  (threshold=0.56)
+============================================================
+[[1059 3052]
+ [1473 6866]]
+              precision    recall  f1-score   support
+
+           0      0.418     0.258     0.319      4111
+           1      0.692     0.823     0.752      8339
+
+    accuracy                          0.637     12450
+   macro avg      0.555     0.540     0.535     12450
+weighted avg      0.602     0.637     0.609     12450
+
+ROC-AUC: 0.5921  PR-AUC: 0.7468  KS: 14.0  Gini: 0.1842  Brier: 0.2178
+
+Decile/Lift table:
+           n  positive  positive_rate   lift  cum_positive_pct
+decile                                                        
+1       1245      1004          0.806  1.204            12.040
+2       1245       926          0.744  1.110            23.144
+3       1245       905          0.727  1.085            33.997
+4       1245       887          0.712  1.064            44.634
+5       1245       833          0.669  0.999            54.623
+6       1245       790          0.635  0.947            64.096
+7       1245       743          0.597  0.891            73.006
+8       1245       801          0.643  0.961            82.612
+9       1245       768          0.617  0.921            91.822
+10      1245       682          0.548  0.818           100.000
+[V1 XGBtuned] train_cv_auc=0.5943 (std 0.0146) test_auc=0.5921 train_auc=0.6674 gap=0.0753 threshold=0.56
+Loaded 62250 rows, 35 columns
+open_time dtype: datetime64[ns, UTC]  (tz: UTC)
+Date range: 2021-05-05 02:10:21+00:00 -> 2023-12-31 05:49:35+00:00
+Class balance: {1: 0.6000803212851405, 0: 0.39991967871485945}
+
+Split at 2023-01-21 15:41:35+00:00
+Train: 49800 rows (2021-05-05 02:10:21+00:00 -> 2023-01-21 15:39:23+00:00)
+Test:  12450 rows (2023-01-21 15:41:35+00:00 -> 2023-12-31 05:49:35+00:00)
+Train class balance: 0.583 profitable
+Test class balance:  0.670 profitable
+
+Excluded as leakage: ['close_time', 'token0_price_close', 'token1_price_close', 'held_value_usd', 'returned_value_usd', 'true_fees_value_usd', 'impermanent_loss_usd', 'position_duration_hours', 'decrease_event_count']
+Excluded as ID/redundant: ['tokenId', 'open_time', 'token0_address', 'token1_address']
+Added interaction features: ['interaction_range_width_x_price_std', 'interaction_fee_tier_x_swap_count']
+Remaining feature columns (23): ['range_width_normalized', 'pool_address', 'fee_tier_pct', 'mint_amount0_adj', 'mint_amount1_adj', 'log_deposit_value_usd', 'token0_price_open', 'token1_price_open', 'deposit_value_usd', 'token0_is_stablecoin', 'token1_is_stablecoin', 'token0_price_std_24h', 'token0_price_pct_change_24h', 'token0_price_range_pct_24h', 'token1_price_std_24h', 'token1_price_pct_change_24h', 'token1_price_range_pct_24h', 'pre_open_avg_daily_swap_count_3d', 'pre_open_avg_daily_token0_volume_3d', 'range_overlaps_recent_trading', 'lp_prior_position_count', 'interaction_range_width_x_price_std', 'interaction_fee_tier_x_swap_count']
+
+X_train shape: (49800, 30), X_test shape: (12450, 30)
+Scaled 19 continuous columns; left 3 binary/dummy columns unscaled
+
+Done. Review the correlation flags and Lasso/RF agreement before finalizing the feature list you report in Chapter 6 of the write-up.
+
+######################################################################
+VARIANT V2
+######################################################################
+Features: 29 columns
+
+============================================================
+V2 LogReg - TEST  (threshold=0.57)
+============================================================
+[[1506 2605]
+ [2215 6124]]
+              precision    recall  f1-score   support
+
+           0      0.405     0.366     0.385      4111
+           1      0.702     0.734     0.718      8339
+
+    accuracy                          0.613     12450
+   macro avg      0.553     0.550     0.551     12450
+weighted avg      0.604     0.613     0.608     12450
+
+ROC-AUC: 0.5797  PR-AUC: 0.7250  KS: 11.7  Gini: 0.1595  Brier: 0.2213
+
+Decile/Lift table:
+           n  positive  positive_rate   lift  cum_positive_pct
+decile                                                        
+1       1245       960          0.771  1.151            11.512
+2       1245       907          0.729  1.088            22.389
+3       1245       894          0.718  1.072            33.109
+4       1245       876          0.704  1.050            43.614
+5       1245       856          0.688  1.027            53.879
+6       1245       831          0.667  0.997            63.845
+7       1245       794          0.638  0.952            73.366
+8       1245       767          0.616  0.920            82.564
+9       1245       759          0.610  0.910            91.666
+10      1245       695          0.558  0.833           100.000
+[V2 LogReg] train_cv_auc=0.5624 (std 0.0229) test_auc=0.5797 train_auc=0.6117 gap=0.0320 threshold=0.57
+
+============================================================
+V2 XGBtuned - TEST  (threshold=0.56)
+============================================================
+[[1018 3093]
+ [1427 6912]]
+              precision    recall  f1-score   support
+
+           0      0.416     0.248     0.311      4111
+           1      0.691     0.829     0.754      8339
+
+    accuracy                          0.637     12450
+   macro avg      0.554     0.538     0.532     12450
+weighted avg      0.600     0.637     0.607     12450
+
+ROC-AUC: 0.5954  PR-AUC: 0.7510  KS: 14.6  Gini: 0.1908  Brier: 0.2175
+
+Decile/Lift table:
+           n  positive  positive_rate   lift  cum_positive_pct
+decile                                                        
+1       1245      1019          0.818  1.222            12.220
+2       1245       924          0.742  1.108            23.300
+3       1245       908          0.729  1.089            34.189
+4       1245       872          0.700  1.046            44.646
+5       1245       848          0.681  1.017            54.815
+6       1245       790          0.635  0.947            64.288
+7       1245       741          0.595  0.889            73.174
+8       1245       785          0.631  0.941            82.588
+9       1245       756          0.607  0.907            91.654
+10      1245       696          0.559  0.835           100.000
+[V2 XGBtuned] train_cv_auc=0.5930 (std 0.0137) test_auc=0.5954 train_auc=0.6686 gap=0.0733 threshold=0.56
+Loaded 62250 rows, 35 columns
+open_time dtype: datetime64[ns, UTC]  (tz: UTC)
+Date range: 2021-05-05 02:10:21+00:00 -> 2023-12-31 05:49:35+00:00
+Class balance: {1: 0.6000803212851405, 0: 0.39991967871485945}
+Added cyclical time features: ['open_hour_sin', 'open_hour_cos', 'open_dow_sin', 'open_dow_cos']
+
+Split at 2023-01-21 15:41:35+00:00
+Train: 49800 rows (2021-05-05 02:10:21+00:00 -> 2023-01-21 15:39:23+00:00)
+Test:  12450 rows (2023-01-21 15:41:35+00:00 -> 2023-12-31 05:49:35+00:00)
+Train class balance: 0.583 profitable
+Test class balance:  0.670 profitable
+
+Excluded as leakage: ['close_time', 'token0_price_close', 'token1_price_close', 'held_value_usd', 'returned_value_usd', 'true_fees_value_usd', 'impermanent_loss_usd', 'position_duration_hours', 'decrease_event_count']
+Excluded as ID/redundant: ['tokenId', 'open_time', 'token0_address', 'token1_address']
+Added interaction features: ['interaction_range_width_x_price_std', 'interaction_fee_tier_x_swap_count']
+Remaining feature columns (27): ['range_width_normalized', 'pool_address', 'fee_tier_pct', 'mint_amount0_adj', 'mint_amount1_adj', 'log_deposit_value_usd', 'token0_price_open', 'token1_price_open', 'deposit_value_usd', 'token0_is_stablecoin', 'token1_is_stablecoin', 'token0_price_std_24h', 'token0_price_pct_change_24h', 'token0_price_range_pct_24h', 'token1_price_std_24h', 'token1_price_pct_change_24h', 'token1_price_range_pct_24h', 'pre_open_avg_daily_swap_count_3d', 'pre_open_avg_daily_token0_volume_3d', 'range_overlaps_recent_trading', 'lp_prior_position_count', 'interaction_range_width_x_price_std', 'interaction_fee_tier_x_swap_count', 'open_hour_sin', 'open_hour_cos', 'open_dow_sin', 'open_dow_cos']
+
+X_train shape: (49800, 34), X_test shape: (12450, 34)
+Scaled 23 continuous columns; left 3 binary/dummy columns unscaled
+
+Done. Review the correlation flags and Lasso/RF agreement before finalizing the feature list you report in Chapter 6 of the write-up.
+
+######################################################################
+VARIANT V3
+######################################################################
+Features: 33 columns
+
+============================================================
+V3 LogReg - TEST  (threshold=0.57)
+============================================================
+[[1521 2590]
+ [2223 6116]]
+              precision    recall  f1-score   support
+
+           0      0.406     0.370     0.387      4111
+           1      0.703     0.733     0.718      8339
+
+    accuracy                          0.613     12450
+   macro avg      0.554     0.552     0.552     12450
+weighted avg      0.605     0.613     0.609     12450
+
+ROC-AUC: 0.5790  PR-AUC: 0.7245  KS: 11.7  Gini: 0.1579  Brier: 0.2214
+
+Decile/Lift table:
+           n  positive  positive_rate   lift  cum_positive_pct
+decile                                                        
+1       1245       958          0.769  1.149            11.488
+2       1245       895          0.719  1.073            22.221
+3       1245       909          0.730  1.090            33.121
+4       1245       895          0.719  1.073            43.854
+5       1245       828          0.665  0.993            53.783
+6       1245       821          0.659  0.985            63.629
+7       1245       815          0.655  0.977            73.402
+8       1245       766          0.615  0.919            82.588
+9       1245       753          0.605  0.903            91.618
+10      1245       699          0.561  0.838           100.000
+[V3 LogReg] train_cv_auc=0.5613 (std 0.0243) test_auc=0.5790 train_auc=0.6123 gap=0.0333 threshold=0.57
+
+============================================================
+V3 XGBtuned - TEST  (threshold=0.56)
+============================================================
+[[ 970 3141]
+ [1304 7035]]
+              precision    recall  f1-score   support
+
+           0      0.427     0.236     0.304      4111
+           1      0.691     0.844     0.760      8339
+
+    accuracy                          0.643     12450
+   macro avg      0.559     0.540     0.532     12450
+weighted avg      0.604     0.643     0.609     12450
+
+ROC-AUC: 0.5948  PR-AUC: 0.7503  KS: 14.8  Gini: 0.1896  Brier: 0.2175
+
+Decile/Lift table:
+           n  positive  positive_rate   lift  cum_positive_pct
+decile                                                        
+1       1245      1013          0.814  1.215            12.148
+2       1245       943          0.757  1.131            23.456
+3       1245       891          0.716  1.068            34.141
+4       1245       875          0.703  1.049            44.634
+5       1245       854          0.686  1.024            54.875
+6       1245       759          0.610  0.910            63.976
+7       1245       776          0.623  0.931            73.282
+8       1245       780          0.627  0.935            82.636
+9       1245       759          0.610  0.910            91.738
+10      1245       689          0.553  0.826           100.000
+[V3 XGBtuned] train_cv_auc=0.5905 (std 0.0168) test_auc=0.5948 train_auc=0.6690 gap=0.0742 threshold=0.56
+
+Saved ablation_results.csv
+
+======================================================================
+ABLATION SUMMARY (train-CV AUC decides the winner)
+======================================================================
+variant    model  n_features  test_auc  test_gini  test_ks_pct  test_pr_auc  test_brier  threshold  test_accuracy  test_macro_f1  test_precision  test_recall  test_f1  cm_tn  cm_fp  cm_fn  cm_tp  train_auc    gap  train_cv_auc_mean  train_cv_auc_std
+     V0   LogReg          27    0.5795     0.1590      11.7848       0.7248      0.2213       0.57         0.6133         0.5509          0.7014       0.7362   0.7183   1497   2614   2200   6139     0.6118 0.0323             0.5627            0.0225
+     V0 XGBtuned          27    0.5955     0.1909      14.9444       0.7513      0.2175       0.56         0.6415         0.5319          0.6912       0.8401   0.7584    981   3130   1333   7006     0.6687 0.0733             0.5936            0.0120
+     V1   LogReg          31    0.5788     0.1577      11.5996       0.7245      0.2214       0.57         0.6149         0.5526          0.7024       0.7375   0.7195   1505   2606   2189   6150     0.6123 0.0335             0.5617            0.0242
+     V1 XGBtuned          31    0.5921     0.1842      14.0328       0.7468      0.2178       0.56         0.6365         0.5355          0.6923       0.8234   0.7521   1059   3052   1473   6866     0.6674 0.0753             0.5943            0.0146
+     V2   LogReg          29    0.5797     0.1595      11.7485       0.7250      0.2213       0.57         0.6129         0.5511          0.7016       0.7344   0.7176   1506   2605   2215   6124     0.6117 0.0320             0.5624            0.0229
+     V2 XGBtuned          29    0.5954     0.1908      14.5812       0.7510      0.2175       0.56         0.6369         0.5321          0.6909       0.8289   0.7536   1018   3093   1427   6912     0.6686 0.0733             0.5930            0.0137
+     V3   LogReg          33    0.5790     0.1579      11.6722       0.7245      0.2214       0.57         0.6134         0.5524          0.7025       0.7334   0.7176   1521   2590   2223   6116     0.6123 0.0333             0.5613            0.0243
+     V3 XGBtuned          33    0.5948     0.1896      14.7628       0.7503      0.2175       0.56         0.6430         0.5319          0.6913       0.8436   0.7599    970   3141   1304   7035     0.6690 0.0742             0.5905            0.0168

@@ -1,0 +1,145 @@
+Loaded 62250 rows, 35 columns
+open_time dtype: datetime64[ns, UTC]  (tz: UTC)
+Date range: 2021-05-05 02:10:21+00:00 -> 2023-12-31 05:49:35+00:00
+Class balance: {1: 0.6000803212851405, 0: 0.39991967871485945}
+Added cyclical time features: ['open_hour_sin', 'open_hour_cos', 'open_dow_sin', 'open_dow_cos']
+
+Split at 2023-01-21 15:41:35+00:00
+Train: 49800 rows (2021-05-05 02:10:21+00:00 -> 2023-01-21 15:39:23+00:00)
+Test:  12450 rows (2023-01-21 15:41:35+00:00 -> 2023-12-31 05:49:35+00:00)
+Train class balance: 0.583 profitable
+Test class balance:  0.670 profitable
+
+Excluded as leakage: ['close_time', 'token0_price_close', 'token1_price_close', 'held_value_usd', 'returned_value_usd', 'true_fees_value_usd', 'impermanent_loss_usd', 'position_duration_hours', 'decrease_event_count']
+Excluded as ID/redundant: ['tokenId', 'open_time', 'token0_address', 'token1_address']
+Added interaction features: ['interaction_range_width_x_price_std', 'interaction_fee_tier_x_swap_count']
+Remaining feature columns (27): ['range_width_normalized', 'pool_address', 'fee_tier_pct', 'mint_amount0_adj', 'mint_amount1_adj', 'log_deposit_value_usd', 'token0_price_open', 'token1_price_open', 'deposit_value_usd', 'token0_is_stablecoin', 'token1_is_stablecoin', 'token0_price_std_24h', 'token0_price_pct_change_24h', 'token0_price_range_pct_24h', 'token1_price_std_24h', 'token1_price_pct_change_24h', 'token1_price_range_pct_24h', 'pre_open_avg_daily_swap_count_3d', 'pre_open_avg_daily_token0_volume_3d', 'range_overlaps_recent_trading', 'lp_prior_position_count', 'interaction_range_width_x_price_std', 'interaction_fee_tier_x_swap_count', 'open_hour_sin', 'open_hour_cos', 'open_dow_sin', 'open_dow_cos']
+
+X_train shape: (49800, 34), X_test shape: (12450, 34)
+Scaled 23 continuous columns; left 3 binary/dummy columns unscaled
+
+Done. Review the correlation flags and Lasso/RF agreement before finalizing the feature list you report in Chapter 6 of the write-up.
+V3 feature count: 33
+
+Mean |SHAP| ranking (all features):
+log_deposit_value_usd                                      0.13445
+lp_prior_position_count                                    0.11803
+range_width_normalized                                     0.07586
+token1_price_open                                          0.06840
+pre_open_avg_daily_swap_count_3d                           0.03322
+mint_amount1_adj                                           0.03097
+pool_address_0x3416cf6c708da44db2624d63ea0aaef7113527c6    0.02823
+fee_tier_pct                                               0.02597
+interaction_range_width_x_price_std                        0.02595
+mint_amount0_adj                                           0.02105
+token1_price_range_pct_24h                                 0.01808
+token1_price_std_24h                                       0.01137
+token0_price_open                                          0.01012
+range_overlaps_recent_trading                              0.00962
+pool_address_0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640    0.00623
+dtype: float32
+
+New features' mean |SHAP|:
+  interaction_range_width_x_price_std: 0.02595
+  interaction_fee_tier_x_swap_count: 0.00578
+  open_dow_sin: 0.00038
+  open_hour_sin: 0.00024
+  open_hour_cos: 0.00019
+  open_dow_cos: 0.00012
+Loaded 62250 rows, 35 columns
+open_time dtype: datetime64[ns, UTC]  (tz: UTC)
+Date range: 2021-05-05 02:10:21+00:00 -> 2023-12-31 05:49:35+00:00
+Class balance: {1: 0.6000803212851405, 0: 0.39991967871485945}
+Added cyclical time features: ['open_hour_sin', 'open_hour_cos', 'open_dow_sin', 'open_dow_cos']
+
+Split at 2023-01-21 15:41:35+00:00
+Train: 49800 rows (2021-05-05 02:10:21+00:00 -> 2023-01-21 15:39:23+00:00)
+Test:  12450 rows (2023-01-21 15:41:35+00:00 -> 2023-12-31 05:49:35+00:00)
+Train class balance: 0.583 profitable
+Test class balance:  0.670 profitable
+
+Excluded as leakage: ['close_time', 'token0_price_close', 'token1_price_close', 'held_value_usd', 'returned_value_usd', 'true_fees_value_usd', 'impermanent_loss_usd', 'position_duration_hours', 'decrease_event_count']
+Excluded as ID/redundant: ['tokenId', 'open_time', 'token0_address', 'token1_address']
+Remaining feature columns (25): ['range_width_normalized', 'pool_address', 'fee_tier_pct', 'mint_amount0_adj', 'mint_amount1_adj', 'log_deposit_value_usd', 'token0_price_open', 'token1_price_open', 'deposit_value_usd', 'token0_is_stablecoin', 'token1_is_stablecoin', 'token0_price_std_24h', 'token0_price_pct_change_24h', 'token0_price_range_pct_24h', 'token1_price_std_24h', 'token1_price_pct_change_24h', 'token1_price_range_pct_24h', 'pre_open_avg_daily_swap_count_3d', 'pre_open_avg_daily_token0_volume_3d', 'range_overlaps_recent_trading', 'lp_prior_position_count', 'open_hour_sin', 'open_hour_cos', 'open_dow_sin', 'open_dow_cos']
+
+X_train shape: (49800, 32), X_test shape: (12450, 32)
+Scaled 21 continuous columns; left 3 binary/dummy columns unscaled
+
+Done. Review the correlation flags and Lasso/RF agreement before finalizing the feature list you report in Chapter 6 of the write-up.
+Loaded 62250 rows, 35 columns
+open_time dtype: datetime64[ns, UTC]  (tz: UTC)
+Date range: 2021-05-05 02:10:21+00:00 -> 2023-12-31 05:49:35+00:00
+Class balance: {1: 0.6000803212851405, 0: 0.39991967871485945}
+
+Split at 2023-01-21 15:41:35+00:00
+Train: 49800 rows (2021-05-05 02:10:21+00:00 -> 2023-01-21 15:39:23+00:00)
+Test:  12450 rows (2023-01-21 15:41:35+00:00 -> 2023-12-31 05:49:35+00:00)
+Train class balance: 0.583 profitable
+Test class balance:  0.670 profitable
+
+Excluded as leakage: ['close_time', 'token0_price_close', 'token1_price_close', 'held_value_usd', 'returned_value_usd', 'true_fees_value_usd', 'impermanent_loss_usd', 'position_duration_hours', 'decrease_event_count']
+Excluded as ID/redundant: ['tokenId', 'open_time', 'token0_address', 'token1_address']
+Added interaction features: ['interaction_range_width_x_price_std', 'interaction_fee_tier_x_swap_count']
+Remaining feature columns (23): ['range_width_normalized', 'pool_address', 'fee_tier_pct', 'mint_amount0_adj', 'mint_amount1_adj', 'log_deposit_value_usd', 'token0_price_open', 'token1_price_open', 'deposit_value_usd', 'token0_is_stablecoin', 'token1_is_stablecoin', 'token0_price_std_24h', 'token0_price_pct_change_24h', 'token0_price_range_pct_24h', 'token1_price_std_24h', 'token1_price_pct_change_24h', 'token1_price_range_pct_24h', 'pre_open_avg_daily_swap_count_3d', 'pre_open_avg_daily_token0_volume_3d', 'range_overlaps_recent_trading', 'lp_prior_position_count', 'interaction_range_width_x_price_std', 'interaction_fee_tier_x_swap_count']
+
+X_train shape: (49800, 30), X_test shape: (12450, 30)
+Scaled 19 continuous columns; left 3 binary/dummy columns unscaled
+
+Done. Review the correlation flags and Lasso/RF agreement before finalizing the feature list you report in Chapter 6 of the write-up.
+Loaded 62250 rows, 35 columns
+open_time dtype: datetime64[ns, UTC]  (tz: UTC)
+Date range: 2021-05-05 02:10:21+00:00 -> 2023-12-31 05:49:35+00:00
+Class balance: {1: 0.6000803212851405, 0: 0.39991967871485945}
+Added cyclical time features: ['open_hour_sin', 'open_hour_cos', 'open_dow_sin', 'open_dow_cos']
+
+Split at 2023-01-21 15:41:35+00:00
+Train: 49800 rows (2021-05-05 02:10:21+00:00 -> 2023-01-21 15:39:23+00:00)
+Test:  12450 rows (2023-01-21 15:41:35+00:00 -> 2023-12-31 05:49:35+00:00)
+Train class balance: 0.583 profitable
+Test class balance:  0.670 profitable
+
+Excluded as leakage: ['close_time', 'token0_price_close', 'token1_price_close', 'held_value_usd', 'returned_value_usd', 'true_fees_value_usd', 'impermanent_loss_usd', 'position_duration_hours', 'decrease_event_count']
+Excluded as ID/redundant: ['tokenId', 'open_time', 'token0_address', 'token1_address']
+Added interaction features: ['interaction_range_width_x_price_std', 'interaction_fee_tier_x_swap_count']
+Remaining feature columns (27): ['range_width_normalized', 'pool_address', 'fee_tier_pct', 'mint_amount0_adj', 'mint_amount1_adj', 'log_deposit_value_usd', 'token0_price_open', 'token1_price_open', 'deposit_value_usd', 'token0_is_stablecoin', 'token1_is_stablecoin', 'token0_price_std_24h', 'token0_price_pct_change_24h', 'token0_price_range_pct_24h', 'token1_price_std_24h', 'token1_price_pct_change_24h', 'token1_price_range_pct_24h', 'pre_open_avg_daily_swap_count_3d', 'pre_open_avg_daily_token0_volume_3d', 'range_overlaps_recent_trading', 'lp_prior_position_count', 'interaction_range_width_x_price_std', 'interaction_fee_tier_x_swap_count', 'open_hour_sin', 'open_hour_cos', 'open_dow_sin', 'open_dow_cos']
+
+X_train shape: (49800, 34), X_test shape: (12450, 34)
+Scaled 23 continuous columns; left 3 binary/dummy columns unscaled
+
+Done. Review the correlation flags and Lasso/RF agreement before finalizing the feature list you report in Chapter 6 of the write-up.
+
+Bootstrap 95% CI on test-AUC difference vs V0 (B=1000, resampling the metric):
+  V1 vs V0: delta=-0.0034  95% CI [-0.0050, -0.0017]  excludes 0
+  V2 vs V0: delta=-0.0001  95% CI [-0.0016, +0.0015]  includes 0 (within noise)
+  V3 vs V0: delta=-0.0006  95% CI [-0.0023, +0.0009]  includes 0 (within noise)
+Loaded 62250 rows, 35 columns
+open_time dtype: datetime64[ns, UTC]  (tz: UTC)
+Date range: 2021-05-05 02:10:21+00:00 -> 2023-12-31 05:49:35+00:00
+Class balance: {1: 0.6000803212851405, 0: 0.39991967871485945}
+
+Split at 2023-01-21 15:41:35+00:00
+Train: 49800 rows (2021-05-05 02:10:21+00:00 -> 2023-01-21 15:39:23+00:00)
+Test:  12450 rows (2023-01-21 15:41:35+00:00 -> 2023-12-31 05:49:35+00:00)
+Train class balance: 0.583 profitable
+Test class balance:  0.670 profitable
+
+Excluded as leakage: ['close_time', 'token0_price_close', 'token1_price_close', 'held_value_usd', 'returned_value_usd', 'true_fees_value_usd', 'impermanent_loss_usd', 'position_duration_hours', 'decrease_event_count']
+Excluded as ID/redundant: ['tokenId', 'open_time', 'token0_address', 'token1_address']
+Added interaction features: ['interaction_range_width_x_price_std', 'interaction_fee_tier_x_swap_count']
+Remaining feature columns (23): ['range_width_normalized', 'pool_address', 'fee_tier_pct', 'mint_amount0_adj', 'mint_amount1_adj', 'log_deposit_value_usd', 'token0_price_open', 'token1_price_open', 'deposit_value_usd', 'token0_is_stablecoin', 'token1_is_stablecoin', 'token0_price_std_24h', 'token0_price_pct_change_24h', 'token0_price_range_pct_24h', 'token1_price_std_24h', 'token1_price_pct_change_24h', 'token1_price_range_pct_24h', 'pre_open_avg_daily_swap_count_3d', 'pre_open_avg_daily_token0_volume_3d', 'range_overlaps_recent_trading', 'lp_prior_position_count', 'interaction_range_width_x_price_std', 'interaction_fee_tier_x_swap_count']
+
+X_train shape: (49800, 30), X_test shape: (12450, 30)
+Scaled 19 continuous columns; left 3 binary/dummy columns unscaled
+
+Done. Review the correlation flags and Lasso/RF agreement before finalizing the feature list you report in Chapter 6 of the write-up.
+
+Collinearity check (train, V2): interaction vs source columns
+                                     interaction_range_width_x_price_std  ...  pre_open_avg_daily_swap_count_3d
+interaction_range_width_x_price_std                                1.000  ...                             0.001
+interaction_fee_tier_x_swap_count                                 -0.016  ...                            -0.331
+range_width_normalized                                            -0.360  ...                             0.008
+token0_price_std_24h                                              -0.011  ...                            -0.173
+fee_tier_pct                                                       0.011  ...                            -0.730
+pre_open_avg_daily_swap_count_3d                                   0.001  ...                             1.000
+
+[6 rows x 6 columns]

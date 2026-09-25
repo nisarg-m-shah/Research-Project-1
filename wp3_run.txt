@@ -1,0 +1,75 @@
+V0 features: 27
+
+--- RFECV with LogReg ---
+
+============================================================
+LogReg RFECV subset (14 feats) - TEST  (threshold=0.58)
+============================================================
+[[1991 2120]
+ [2968 5371]]
+              precision    recall  f1-score   support
+
+           0      0.401     0.484     0.439      4111
+           1      0.717     0.644     0.679      8339
+
+    accuracy                          0.591     12450
+   macro avg      0.559     0.564     0.559     12450
+weighted avg      0.613     0.591     0.599     12450
+
+ROC-AUC: 0.5891  PR-AUC: 0.7320  KS: 13.9  Gini: 0.1782  Brier: 0.2210
+
+Decile/Lift table:
+           n  positive  positive_rate   lift  cum_positive_pct
+decile                                                        
+1       1245       989          0.794  1.186            11.860
+2       1245       889          0.714  1.066            22.521
+3       1245       901          0.724  1.080            33.325
+4       1245       919          0.738  1.102            44.346
+5       1245       854          0.686  1.024            54.587
+6       1245       802          0.644  0.962            64.204
+7       1245       783          0.629  0.939            73.594
+8       1245       779          0.626  0.934            82.936
+9       1245       719          0.578  0.862            91.558
+10      1245       704          0.565  0.844           100.000
+[LogReg] selected 14/27 features, CV AUC 0.5639 (std 0.0258), test AUC 0.5891, threshold 0.58
+
+--- RFECV with XGBtuned ---
+
+============================================================
+XGBtuned RFECV subset (21 feats) - TEST  (threshold=0.56)
+============================================================
+[[ 986 3125]
+ [1351 6988]]
+              precision    recall  f1-score   support
+
+           0      0.422     0.240     0.306      4111
+           1      0.691     0.838     0.757      8339
+
+    accuracy                          0.640     12450
+   macro avg      0.556     0.539     0.532     12450
+weighted avg      0.602     0.640     0.608     12450
+
+ROC-AUC: 0.5982  PR-AUC: 0.7535  KS: 14.4  Gini: 0.1964  Brier: 0.2171
+
+Decile/Lift table:
+           n  positive  positive_rate   lift  cum_positive_pct
+decile                                                        
+1       1245      1027          0.825  1.232            12.316
+2       1245       957          0.769  1.148            23.792
+3       1245       874          0.702  1.048            34.273
+4       1245       874          0.702  1.048            44.754
+5       1245       826          0.663  0.991            54.659
+6       1245       797          0.640  0.956            64.216
+7       1245       776          0.623  0.931            73.522
+8       1245       759          0.610  0.910            82.624
+9       1245       766          0.615  0.919            91.810
+10      1245       683          0.549  0.819           100.000
+[XGBtuned] selected 21/27 features, CV AUC 0.5962 (std 0.0126), test AUC 0.5982, threshold 0.56
+
+Saved rfecv_results.csv and rfecv_cv_curve.csv
+Saved fig13_rfecv_curve.png
+
+============================================================
+estimator  n_features_total  n_features_selected  best_cv_auc_mean  best_cv_auc_std  test_auc  test_gini  test_ks_pct  test_pr_auc  test_brier  threshold  test_accuracy  test_macro_f1  cm_tn  cm_fp  cm_fn  cm_tp  train_auc    gap
+   LogReg                27                   14            0.5639           0.0258    0.5891     0.1782      13.8912       0.7320      0.2210       0.58         0.5913         0.5588   1991   2120   2968   5371     0.6069 0.0178
+ XGBtuned                27                   21            0.5962           0.0126    0.5982     0.1964      14.4323       0.7535      0.2171       0.56         0.6405         0.5316    986   3125   1351   6988     0.6682 0.0700

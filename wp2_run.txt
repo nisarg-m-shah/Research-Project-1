@@ -1,0 +1,75 @@
+V0 features: 27 columns
+
+--- RF baseline ---
+
+============================================================
+RFbaseline - TEST  (threshold=0.54)
+============================================================
+[[1453 2658]
+ [2003 6336]]
+              precision    recall  f1-score   support
+
+           0      0.420     0.353     0.384      4111
+           1      0.704     0.760     0.731      8339
+
+    accuracy                          0.626     12450
+   macro avg      0.562     0.557     0.558     12450
+weighted avg      0.611     0.626     0.616     12450
+
+ROC-AUC: 0.5962  PR-AUC: 0.7488  KS: 13.6  Gini: 0.1924  Brier: 0.2207
+
+Decile/Lift table:
+           n  positive  positive_rate   lift  cum_positive_pct
+decile                                                        
+1       1245      1033          0.830  1.239            12.388
+2       1245       906          0.728  1.086            23.252
+3       1245       885          0.711  1.061            33.865
+4       1245       874          0.702  1.048            44.346
+5       1245       845          0.679  1.013            54.479
+6       1245       824          0.662  0.988            64.360
+7       1245       794          0.638  0.952            73.882
+8       1245       741          0.595  0.889            82.768
+9       1245       746          0.599  0.895            91.714
+10      1245       691          0.555  0.829           100.000
+[RFbaseline] train_cv_auc=0.5789 (std 0.0192) test_auc=0.5962 train_auc=0.9815 gap=0.3853 threshold=0.54
+
+--- RF tuned (RandomizedSearchCV, 24 iters, TSCV roc_auc) ---
+Fitting 5 folds for each of 24 candidates, totalling 120 fits
+Best params: {'n_estimators': 300, 'min_samples_split': 5, 'min_samples_leaf': 10, 'max_features': 'log2', 'max_depth': 10}
+Best CV score: 0.585
+
+============================================================
+RFtuned - TEST  (threshold=0.54)
+============================================================
+[[1310 2801]
+ [1883 6456]]
+              precision    recall  f1-score   support
+
+           0      0.410     0.319     0.359      4111
+           1      0.697     0.774     0.734      8339
+
+    accuracy                          0.624     12450
+   macro avg      0.554     0.546     0.546     12450
+weighted avg      0.603     0.624     0.610     12450
+
+ROC-AUC: 0.5978  PR-AUC: 0.7533  KS: 14.3  Gini: 0.1956  Brier: 0.2191
+
+Decile/Lift table:
+           n  positive  positive_rate   lift  cum_positive_pct
+decile                                                        
+1       1245      1052          0.845  1.262            12.615
+2       1245       920          0.739  1.103            23.648
+3       1245       894          0.718  1.072            34.369
+4       1245       864          0.694  1.036            44.730
+5       1245       831          0.667  0.997            54.695
+6       1245       795          0.639  0.953            64.228
+7       1245       763          0.613  0.915            73.378
+8       1245       771          0.619  0.925            82.624
+9       1245       741          0.595  0.889            91.510
+10      1245       708          0.569  0.849           100.000
+[RFtuned] train_cv_auc=0.5850 (std 0.0206) test_auc=0.5978 train_auc=0.7337 gap=0.1359 threshold=0.54
+
+Saved rf_results.csv
+variant      model  n_features  test_auc  test_gini  test_ks_pct  test_pr_auc  test_brier  threshold  test_accuracy  test_macro_f1  test_precision  test_recall  test_f1  cm_tn  cm_fp  cm_fn  cm_tp  train_auc    gap  train_cv_auc_mean  train_cv_auc_std
+     V0 RFbaseline          27    0.5962     0.1924      13.5643       0.7488      0.2207       0.54         0.6256         0.5576          0.7045       0.7598   0.7311   1453   2658   2003   6336     0.9815 0.3853             0.5789            0.0192
+     V0    RFtuned          27    0.5978     0.1956      14.3234       0.7533      0.2191       0.54         0.6238         0.5463          0.6974       0.7742   0.7338   1310   2801   1883   6456     0.7337 0.1359             0.5850            0.0206

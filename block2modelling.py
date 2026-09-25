@@ -12,8 +12,9 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     classification_report, confusion_matrix, roc_auc_score, roc_curve,
-    average_precision_score, brier_score_loss
+    average_precision_score, brier_score_loss, f1_score
 )
+from eval_utils import full_report, ks_gini, decile_lift_table, best_threshold_macro_f1
 
 pd.set_option('display.width', 120)
 
@@ -69,56 +70,21 @@ xgb_probs_train = xgb.predict_proba(X_train)[:, 1]
 # ============================================================
 # THRESHOLD — choose via train-set F1 sweep, not a blind 0.5
 # ============================================================
-from sklearn.metrics import f1_score
-def best_threshold(y_true, probs):
-    best_t, best_f1 = 0.5, 0
-    for t in np.arange(0.3, 0.71, 0.01):
-        f1 = f1_score(y_true, (probs >= t).astype(int))
-        if f1 > best_f1:
-            best_t, best_f1 = t, f1
-    return best_t
+# Session-2 WP0 (brief Section 3b): the legacy positive-class F1 selector
+# was reproduced first (it gives 0.45 on the original features). The project
+# rule is TRAIN MACRO-F1 (handoff Section 4) - applied here. It must
+# reproduce the reported 0.56 threshold.
 
-xgb_threshold = best_threshold(y_train, xgb_probs_train)
-print(f"\nSelected XGBoost threshold (train-set F1-optimal): {xgb_threshold:.2f}")
+xgb_threshold = best_threshold_macro_f1(y_train, xgb_probs_train)
+print(f"\nSelected XGBoost threshold (train-set macro-F1-optimal): {xgb_threshold:.2f}")
 
 # ============================================================
 # EVALUATION BATTERY (run once per model)
 # ============================================================
-def ks_gini(y_true, probs):
-    df_ = pd.DataFrame({'y': y_true.values, 'p': probs})
-    df_['decile'] = pd.qcut(df_['p'].rank(method='first'), 10, labels=False)
-    grp = df_.groupby('decile')['y'].agg(['sum', 'count'])
-    grp['cum_bad'] = (grp['sum'] / grp['sum'].sum()).cumsum()          # profitable = "good" here; kept name from course convention
-    grp['cum_good'] = ((grp['count'] - grp['sum']) / (grp['count'] - grp['sum']).sum()).cumsum()
-    ks = (grp['cum_bad'] - grp['cum_good']).abs().max()
-    auc = roc_auc_score(y_true, probs)
-    gini = 2 * auc - 1
-    return ks, gini, auc
-
-def decile_lift_table(y_true, probs):
-    df_ = pd.DataFrame({'y': y_true.values, 'p': probs})
-    df_['decile'] = pd.qcut(df_['p'].rank(method='first', ascending=False), 10, labels=range(1, 11))
-    tbl = df_.groupby('decile').agg(n=('y', 'count'), positive=('y', 'sum'))
-    tbl['positive_rate'] = tbl['positive'] / tbl['n']
-    overall_rate = df_['y'].mean()
-    tbl['lift'] = tbl['positive_rate'] / overall_rate
-    tbl['cum_positive_pct'] = (tbl['positive'].cumsum() / tbl['positive'].sum() * 100)
-    return tbl
-
-def full_report(name, y_true, probs, threshold):
-    preds = (probs >= threshold).astype(int)
-    print(f"\n{'='*60}\n{name}  (threshold={threshold:.2f})\n{'='*60}")
-    print(confusion_matrix(y_true, preds))
-    print(classification_report(y_true, preds, digits=3))
-    ks, gini, auc = ks_gini(y_true, probs)
-    pr_auc = average_precision_score(y_true, probs)
-    brier = brier_score_loss(y_true, probs)
-    print(f"ROC-AUC: {auc:.4f}  PR-AUC: {pr_auc:.4f}  KS: {ks*100:.1f}  Gini: {gini:.4f}  Brier: {brier:.4f}")
-    if gini > 0.75 or auc > 0.9:
-        print("!! Gini/AUC unusually high — re-check for leakage before trusting this.")
-    print("\nDecile/Lift table:")
-    print(decile_lift_table(y_true, probs).round(3))
-    return {'auc': auc, 'pr_auc': pr_auc, 'ks': ks, 'gini': gini, 'brier': brier}
+# ks_gini, decile_lift_table and full_report now live in eval_utils.py
+# (identical behaviour; full_report's return dict is backward-compatibly
+# extended with ks_pct, threshold, cm, accuracy, precision, recall, f1,
+# macro_f1 and decile_table).
 
 print("\n" + "#"*60)
 print("# LOGISTIC REGRESSION (baseline)")
@@ -180,6 +146,53 @@ except ImportError:
 # ============================================================
 # SAVE
 # ============================================================
-pd.DataFrame([lr_test_metrics, xgb_test_metrics], index=['LogReg', 'XGBoost']).to_csv("model_comparison_test_metrics.csv")
-print("\nSaved model_comparison_test_metrics.csv")
+# Self-contained comparison rows: test battery + train AUC + train-test gap
+# + 5-fold TimeSeriesSplit CV AUC + the confusion-matrix cells, so WP5 can
+# aggregate without re-running any fit (every cell traced to a CSV on disk).
+import numpy as np
+from sklearn.model_selection import TimeSeriesSplit, cross_val_score
+
+tscv = TimeSeriesSplit(n_splits=5)
+
+
+def _cv(model, X, y):
+    s = cross_val_score(model, X, y, cv=tscv, scoring='roc_auc', n_jobs=-1)
+    return float(s.mean()), float(s.std())
+
+
+# cross_val_score does not pass an eval_set, so the fitted early-stopping
+# XGBoost is CV-cloned at its best_iteration trees without the callback
+# (same data, same seed -> the CV AUC measures that exact model).
+xgb_for_cv = XGBClassifier(
+    n_estimators=xgb.get_booster().num_boosted_rounds(), max_depth=4,
+    learning_rate=0.05, subsample=0.8, colsample_bytree=0.8, eval_metric='auc',
+    random_state=0, n_jobs=-1
+)
+
+
+def _row(name, te, m, train_auc, cv_mean, cv_std):
+    r = {k: te[k] for k in scalar_keys}
+    r.update({'train_auc': train_auc, 'gap': train_auc - te['auc'],
+              'train_cv_auc_mean': cv_mean, 'train_cv_auc_std': cv_std,
+              'cm_tn': int(te['cm'][0, 0]), 'cm_fp': int(te['cm'][0, 1]),
+              'cm_fn': int(te['cm'][1, 0]), 'cm_tp': int(te['cm'][1, 1])})
+    return r
+
+
+scalar_keys = ['auc', 'pr_auc', 'ks', 'gini', 'brier', 'ks_pct', 'threshold',
+               'accuracy', 'precision', 'recall', 'f1', 'macro_f1']
+
+lr_cv, xgb_cv = _cv(lr, X_train, y_train), _cv(xgb_for_cv, X_train, y_train)
+rows = [
+    _row('LogReg', lr_test_metrics, lr,
+         float(ks_gini(y_train, lr_probs_train)[2]), *lr_cv),
+    _row('XGBoost', xgb_test_metrics, xgb,
+         float(ks_gini(y_train, xgb_probs_train)[2]), *xgb_cv),
+]
+# This is the Block 2 checkpoint. WP5's make_comparison_table.py reads this
+# file and writes the canonical model_comparison_test_metrics_v2.csv with the
+# full battery; keeping them separate avoids the aggregator reading the very
+# file it is about to overwrite.
+pd.DataFrame(rows, index=['LogReg', 'XGBoost']).to_csv("block2_base_metrics.csv")
+print("\nSaved block2_base_metrics.csv")
 print("\nDone. XGBoost threshold chosen:", xgb_threshold)

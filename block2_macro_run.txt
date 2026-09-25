@@ -1,0 +1,179 @@
+/Users/nisarg52/Documents/GitHub/Research Project/eval_utils.py:47: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  tbl = df_.groupby('decile').agg(n=('y', 'count'), positive=('y', 'sum'))
+/Users/nisarg52/Documents/GitHub/Research Project/eval_utils.py:47: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  tbl = df_.groupby('decile').agg(n=('y', 'count'), positive=('y', 'sum'))
+/Users/nisarg52/Documents/GitHub/Research Project/eval_utils.py:47: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  tbl = df_.groupby('decile').agg(n=('y', 'count'), positive=('y', 'sum'))
+/Users/nisarg52/Documents/GitHub/Research Project/eval_utils.py:47: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  tbl = df_.groupby('decile').agg(n=('y', 'count'), positive=('y', 'sum'))
+X_train: (49800, 27), X_test: (12450, 27)
+XGBoost stopped at 49 trees
+
+Selected XGBoost threshold (train-set macro-F1-optimal): 0.56
+
+############################################################
+# LOGISTIC REGRESSION (baseline)
+############################################################
+
+============================================================
+LR — TEST  (threshold=0.50)
+============================================================
+[[ 404 3707]
+ [ 510 7829]]
+              precision    recall  f1-score   support
+
+           0      0.442     0.098     0.161      4111
+           1      0.679     0.939     0.788      8339
+
+    accuracy                          0.661     12450
+   macro avg      0.560     0.519     0.474     12450
+weighted avg      0.601     0.661     0.581     12450
+
+ROC-AUC: 0.5795  PR-AUC: 0.7248  KS: 11.8  Gini: 0.1590  Brier: 0.2213
+
+Decile/Lift table:
+           n  positive  positive_rate   lift  cum_positive_pct
+decile                                                        
+1       1245       959          0.770  1.150            11.500
+2       1245       906          0.728  1.086            22.365
+3       1245       895          0.719  1.073            33.097
+4       1245       876          0.704  1.050            43.602
+5       1245       858          0.689  1.029            53.891
+6       1245       832          0.668  0.998            63.869
+7       1245       792          0.636  0.950            73.366
+8       1245       765          0.614  0.917            82.540
+9       1245       762          0.612  0.914            91.678
+10      1245       694          0.557  0.832           100.000
+
+============================================================
+LR — TRAIN  (threshold=0.50)
+============================================================
+[[ 4356 16428]
+ [ 3998 25018]]
+              precision    recall  f1-score   support
+
+           0      0.521     0.210     0.299     20784
+           1      0.604     0.862     0.710     29016
+
+    accuracy                          0.590     49800
+   macro avg      0.563     0.536     0.505     49800
+weighted avg      0.569     0.590     0.539     49800
+
+ROC-AUC: 0.6118  PR-AUC: 0.6830  KS: 17.3  Gini: 0.2235  Brier: 0.2339
+
+Decile/Lift table:
+           n  positive  positive_rate   lift  cum_positive_pct
+decile                                                        
+1       4980      3760          0.755  1.296            12.958
+2       4980      3493          0.701  1.204            24.997
+3       4980      3330          0.669  1.148            36.473
+4       4980      3121          0.627  1.076            47.229
+5       4980      2888          0.580  0.995            57.182
+6       4980      2718          0.546  0.937            66.549
+7       4980      2463          0.495  0.849            75.038
+8       4980      2448          0.492  0.844            83.475
+9       4980      2496          0.501  0.860            92.077
+10      4980      2299          0.462  0.792           100.000
+
+############################################################
+# XGBOOST (challenger)
+############################################################
+
+============================================================
+XGBoost — TEST  (threshold=0.56)
+============================================================
+[[1496 2615]
+ [2128 6211]]
+              precision    recall  f1-score   support
+
+           0      0.413     0.364     0.387      4111
+           1      0.704     0.745     0.724      8339
+
+    accuracy                          0.619     12450
+   macro avg      0.558     0.554     0.555     12450
+weighted avg      0.608     0.619     0.612     12450
+
+ROC-AUC: 0.5929  PR-AUC: 0.7438  KS: 14.4  Gini: 0.1859  Brier: 0.2190
+
+Decile/Lift table:
+           n  positive  positive_rate   lift  cum_positive_pct
+decile                                                        
+1       1245      1017          0.817  1.220            12.196
+2       1245       839          0.674  1.006            22.257
+3       1245       948          0.761  1.137            33.625
+4       1245       903          0.725  1.083            44.454
+5       1245       859          0.690  1.030            54.755
+6       1245       832          0.668  0.998            64.732
+7       1245       757          0.608  0.908            73.810
+8       1245       742          0.596  0.890            82.708
+9       1245       764          0.614  0.916            91.870
+10      1245       678          0.545  0.813           100.000
+
+============================================================
+XGBoost — TRAIN  (threshold=0.56)
+============================================================
+[[12116  8668]
+ [ 9921 19095]]
+              precision    recall  f1-score   support
+
+           0      0.550     0.583     0.566     20784
+           1      0.688     0.658     0.673     29016
+
+    accuracy                          0.627     49800
+   macro avg      0.619     0.621     0.619     49800
+weighted avg      0.630     0.627     0.628     49800
+
+ROC-AUC: 0.6740  PR-AUC: 0.7415  KS: 24.5  Gini: 0.3481  Brier: 0.2237
+
+Decile/Lift table:
+           n  positive  positive_rate   lift  cum_positive_pct
+decile                                                        
+1       4980      4234          0.850  1.459            14.592
+2       4980      3610          0.725  1.244            27.033
+3       4980      3418          0.686  1.178            38.813
+4       4980      3211          0.645  1.107            49.879
+5       4980      2996          0.602  1.033            60.205
+6       4980      2827          0.568  0.974            69.948
+7       4980      2612          0.524  0.900            78.950
+8       4980      2426          0.487  0.836            87.310
+9       4980      2125          0.427  0.732            94.634
+10      4980      1557          0.313  0.537           100.000
+
+============================================================
+TRAIN vs TEST GAP (XGBoost)
+============================================================
+                                                          train  ...                                                gap
+auc                                                    0.674035  ...                                           0.081091
+pr_auc                                                 0.741527  ...                                          -0.002305
+ks                                                     0.244513  ...                                           0.100516
+gini                                                    0.34807  ...                                           0.162181
+brier                                                  0.223683  ...                                           0.004674
+ks_pct                                                 24.45125  ...                                          10.051628
+threshold                                                  0.56  ...                                                0.0
+cm                               [[12116, 8668], [9921, 19095]]  ...                     [[10620, 6053], [7793, 12884]]
+accuracy                                               0.626727  ...                                           0.007691
+precision                                              0.687786  ...                                           -0.01593
+recall                                                 0.658085  ...                                          -0.086728
+f1                                                     0.672608  ...                                          -0.051074
+macro_f1                                               0.619249  ...                                           0.064002
+decile_table             n  positive  positive_rate      lif...  ...             n  positive  positive_rate      lif...
+
+[14 rows x 3 columns]
+Rule of thumb: >0.05 AUC gap is worth investigating; this dataset also has a
+known train(58%)/test(67%) class-balance shift from the time split, which will
+inflate some of this gap independent of overfitting — note both in the report.
+
+============================================================
+LEARNING CURVE (chronological slices, XGBoost)
+============================================================
+  train_size=  8466  train_auc=0.7341  test_auc=0.5447  gap=0.1894
+  train_size= 16932  train_auc=0.7048  test_auc=0.5884  gap=0.1164
+  train_size= 25398  train_auc=0.6882  test_auc=0.5998  gap=0.0884
+  train_size= 33864  train_auc=0.6840  test_auc=0.5990  gap=0.0850
+  train_size= 42330  train_auc=0.6737  test_auc=0.5928  gap=0.0809
+
+SHAP computed on a 3000-row test sample. Use shap.summary_plot(shap_values, ...) in a notebook/Streamlit to render the plot for your report/dashboard.
+
+Saved block2_base_metrics.csv
+
+Done. XGBoost threshold chosen: 0.5600000000000003
